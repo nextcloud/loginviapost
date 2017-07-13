@@ -13,11 +13,13 @@ pipeline:
       - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
       - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
       - cd ../server
+      - cd apps/$APP_NAME/
+      - rm -rf Tests
 
       # Code checker
+      - cd ../../
       - ./occ app:check-code $APP_NAME -c strong-comparison
       - ./occ app:check-code $APP_NAME -c deprecation
-      - cd apps/$APP_NAME/
     when:
       matrix:
         TESTS: check-app-compatbility
@@ -32,8 +34,11 @@ pipeline:
       - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
       - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
       - cd ../server
+      - cd apps/$APP_NAME/
+      - rm -rf Tests
 
       # Code checker
+      - cd ../../
       - ./occ app:check-code $APP_NAME -c strong-comparison
       - ./occ app:check-code $APP_NAME -c deprecation
       - cd apps/$APP_NAME/
@@ -75,8 +80,8 @@ pipeline:
 
       # Create coverage report
       - wget https://codecov.io/bash -O codecov.sh
-      - sh -c "if [ '$DRONE_BUILD_EVENT' = 'pull_request' ]; then bash codecov.sh -B $DRONE_BRANCH -C $DRONE_COMMIT -P $DRONE_PULL_REQUEST -t f3e5390a-15fe-46ea-9e10-8b24addb0d40 -f clover.xml; fi"
-      - sh -c "if [ '$DRONE_BUILD_EVENT' != 'pull_request' ]; then bash codecov.sh -B $DRONE_BRANCH -C $DRONE_COMMIT -t f3e5390a-15fe-46ea-9e10-8b24addb0d40 -f clover.xml; fi"
+      - sh -c "if [ '$DRONE_BUILD_EVENT' = 'pull_request' ]; then bash codecov.sh -B $DRONE_BRANCH -C $DRONE_COMMIT -P $DRONE_PULL_REQUEST -t 7b5aa41e-0493-4bd6-8a14-8bcd32a68c60 -f clover.xml; fi"
+      - sh -c "if [ '$DRONE_BUILD_EVENT' != 'pull_request' ]; then bash codecov.sh -B $DRONE_BRANCH -C $DRONE_COMMIT -t 7b5aa41e-0493-4bd6-8a14-8bcd32a68c60 -f clover.xml; fi"
     when:
       matrix:
         TESTS: php5.6
@@ -139,8 +144,8 @@ pipeline:
 
       # Create coverage report
       - wget https://codecov.io/bash -O codecov.sh
-      - sh -c "if [ '$DRONE_BUILD_EVENT' = 'pull_request' ]; then bash codecov.sh -B $DRONE_BRANCH -C $DRONE_COMMIT -P $DRONE_PULL_REQUEST -t f3e5390a-15fe-46ea-9e10-8b24addb0d40 -f clover.xml; fi"
-      - sh -c "if [ '$DRONE_BUILD_EVENT' != 'pull_request' ]; then bash codecov.sh -B $DRONE_BRANCH -C $DRONE_COMMIT -t f3e5390a-15fe-46ea-9e10-8b24addb0d40 -f clover.xml; fi"
+      - sh -c "if [ '$DRONE_BUILD_EVENT' = 'pull_request' ]; then bash codecov.sh -B $DRONE_BRANCH -C $DRONE_COMMIT -P $DRONE_PULL_REQUEST -t 7b5aa41e-0493-4bd6-8a14-8bcd32a68c60 -f clover.xml; fi"
+      - sh -c "if [ '$DRONE_BUILD_EVENT' != 'pull_request' ]; then bash codecov.sh -B $DRONE_BRANCH -C $DRONE_COMMIT -t 7b5aa41e-0493-4bd6-8a14-8bcd32a68c60 -f clover.xml; fi"
     when:
       matrix:
         TESTS: php5.6-stable12
@@ -193,11 +198,12 @@ pipeline:
       # Pre-setup steps
       - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
       - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
-      - cd ../server/apps/$APP_NAME
+      - cd ../server/
+      - ./occ app:enable loginviapost
       - php -S localhost:8080 &
 
       # Run behat tests
-      - cd Tests/Integration/
+      - cd apps/$APP_NAME/Tests/Integration/
       - vendor/bin/behat
     when:
       matrix:
@@ -212,11 +218,12 @@ pipeline:
       # Pre-setup steps
       - wget https://raw.githubusercontent.com/nextcloud/travis_ci/master/before_install.sh
       - bash ./before_install.sh $APP_NAME $CORE_BRANCH $DB
-      - cd ../server/apps/$APP_NAME
+      - cd ../server/
+      - ./occ app:enable loginviapost
       - php -S localhost:8080 &
 
       # Run behat tests
-      - cd Tests/Integration/
+      - cd apps/$APP_NAME/Tests/Integration/
       - vendor/bin/behat
     when:
       matrix:
