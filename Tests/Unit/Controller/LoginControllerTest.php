@@ -19,7 +19,7 @@
  *
  */
 
-namespace OCA\LoginViaPost\Tests\Unit;
+namespace OCA\LoginViaPost\Tests\Unit\Controller;
 
 use OC\Authentication\TwoFactorAuth\Manager;
 use OC\User\Session;
@@ -30,7 +30,6 @@ use OCP\ILogger;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IURLGenerator;
-use OCP\IUserManager;
 use OCP\IUserSession;
 use Test\TestCase;
 
