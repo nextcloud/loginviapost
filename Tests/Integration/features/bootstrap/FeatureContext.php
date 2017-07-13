@@ -19,7 +19,6 @@ class FeatureContext implements Context {
 	private function sendRequest($username,
 								 $password,
 								 $cookies = false) {
-
 		$params = [];
 		if($cookies) {
 			$params['cookies'] = \GuzzleHttp\Cookie\CookieJar::fromArray([
