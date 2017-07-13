@@ -12,9 +12,9 @@
 	<!-- filters for code coverage -->
 	<filter>
 		<whitelist>
-			<directory suffix=".php">../../loginviapost/appinfo</directory>
-			<directory suffix=".php">../../loginviapost/lib</directory>
-		</whitelist>
+			<directory suffix=".php">../../appinfo</directory>
+			<directory suffix=".php">../../lib</directory>
+		</whitelist>s
 	</filter>
 	<logging>
 		<!-- and this is where your report will be written -->
