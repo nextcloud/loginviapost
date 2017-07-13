@@ -3,8 +3,18 @@
 use Behat\Behat\Context\Context;
 
 class FeatureContext implements Context {
-	/** @var \GuzzleHttp\Message\ResponseInterface */
+	/** @var \GuzzleHttp\Psr7\Response */
 	private $response;
+	/** @var array */
+	private $createdUsers = [];
+
+	/** @AfterScenario */
+	public function afterScenario() {
+		foreach($this->createdUsers as $user) {
+			$cmd = sprintf('php ../../../../occ user:delete %s', $user);
+			shell_exec($cmd);
+		}
+	}
 
 	private function sendRequest($username,
 								 $password,
@@ -12,16 +22,18 @@ class FeatureContext implements Context {
 
 		$params = [];
 		if($cookies) {
-			$params['cookies'] = [
-				'testCookie' => '1234567890',
-			];
+			$params['cookies'] = \GuzzleHttp\Cookie\CookieJar::fromArray([
+				'TestCookie' => 'TestValue'
+			], 'localhost:8080');
+		} else {
+			$params['cookies'] = \GuzzleHttp\Cookie\CookieJar::fromArray([], 'localhost:8080');
 		}
 		$params['form_params'] = [
 			'username' => $username,
 			'password' => $password,
 		];
 
-		$client = new GuzzleHttp\Client();
+		$client = new GuzzleHttp\Client(['allow_redirects' => ['track_redirects' => true]]);
 		$this->response = $client->request(
 			'POST',
 			'http://localhost:8080/index.php/apps/loginviapost/login',
@@ -49,8 +61,10 @@ class FeatureContext implements Context {
 	 * @Then The URL should redirect to :url
 	 */
 	public function theUrlShouldRedirectTo($url) {
-		if($this->response->getEffectiveUrl() !== $url) {
-			throw new InvalidArgumentException("Expected {$this->response->getEffectiveUrl()}, got $url");
+		$realUrl = $this->response->getHeader(\GuzzleHttp\RedirectMiddleware::HISTORY_HEADER);
+		$realUrl = $realUrl[count($realUrl) - 1];
+		if($realUrl !== $url) {
+			throw new InvalidArgumentException("Expected $url, got $realUrl");
 		}
 	}
 
@@ -58,10 +72,12 @@ class FeatureContext implements Context {
 	 * @Given User :user exists
 	 */
 	public function userExists($user) {
-		putenv('OC_PASS=password');
-		$cmd = sprintf('php ../../../../occ user:delete %s', $user);
+		$this->createdUsers[] = $user;
+		$cmd = sprintf('php ../../../../occ config:system:set auth.bruteforce.protection.enabled --value false --type boolean');
 		shell_exec($cmd);
+		putenv('OC_PASS=password');
 		$cmd = sprintf('php ../../../../occ user:add %s --password-from-env', $user);
 		shell_exec($cmd);
+		sleep(1);
 	}
 }
