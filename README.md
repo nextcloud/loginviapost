@@ -1,4 +1,4 @@
-# Login to Nextcloud via HTTP POST request
+# Login to Nextcloud via HTTP POST request [![codecov](https://codecov.io/gh/nextcloud/loginviapost/branch/master/graph/badge.svg)](https://codecov.io/gh/nextcloud/loginviapost)
 
 **Warning:** This plugin allows login CSRF by design. You are likely better off
 using a proper single-sign-on solution such as the [Nextcloud SAML application](https://github.com/nextcloud/user_saml).
