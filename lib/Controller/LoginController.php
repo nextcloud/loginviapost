@@ -99,10 +99,10 @@ class LoginController extends Controller {
 	 */
 	public function login($username, $password) {
 		$class = new \ReflectionClass(\OC\Core\Controller\LoginController::class);
-		$parameterCount = $class->getConstructor()->getNumberOfParameters();
+		$parameters = $class->getConstructor()->getParameters();
 
 		/** @var \OC\Core\Controller\LoginController $loginController */
-		if($parameterCount === 9) {
+		if($parameters[8]->getName() === 'throttler') {
 			$loginController = new \OC\Core\Controller\LoginController(
 				'core',
 				$this->getMockedRequest(),
