@@ -33,6 +33,9 @@ use OCP\IURLGenerator;
 use OCP\IUserSession;
 use Test\TestCase;
 
+/**
+ * @group DB
+ */
 class LoginControllerTest extends TestCase {
 	/** @var IRequest|\PHPUnit_Framework_MockObject_MockObject */
 	private $request;

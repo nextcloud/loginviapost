@@ -60,8 +60,10 @@ class FeatureContext implements Context {
 	 * @Then The URL should redirect to :url
 	 */
 	public function theUrlShouldRedirectTo($url) {
+		$url = str_replace('&redirect_url=', '', $url);
 		$realUrl = $this->response->getHeader(\GuzzleHttp\RedirectMiddleware::HISTORY_HEADER);
 		$realUrl = $realUrl[count($realUrl) - 1];
+		$realUrl = str_replace('&redirect_url=', '', $realUrl);
 		if($realUrl !== $url) {
 			throw new InvalidArgumentException("Expected $url, got $realUrl");
 		}
