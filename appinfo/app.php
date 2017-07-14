@@ -25,7 +25,7 @@ $currentUrl = $serverContainer->getRequest()->getServerProtocol() . '://' .$serv
 $expectedUrl = $serverContainer->getURLGenerator()->getAbsoluteURL('/index.php/apps/loginviapost/login');
 
 //  Only process on login URL
-if($currentUrl !== $expectedUrl) {
+if($currentUrl !== $expectedUrl && !defined('PHPUNIT_BYPASS_URL')) {
 	return;
 }
 

@@ -98,18 +98,35 @@ class LoginController extends Controller {
 	 * @return RedirectResponse
 	 */
 	public function login($username, $password) {
+		$class = new \ReflectionClass(\OC\Core\Controller\LoginController::class);
+		$parameterCount = $class->getConstructor()->getNumberOfParameters();
+
 		/** @var \OC\Core\Controller\LoginController $loginController */
-		$loginController = new \OC\Core\Controller\LoginController(
+		if($parameterCount === 9) {
+			$loginController = new \OC\Core\Controller\LoginController(
+				'core',
+				$this->getMockedRequest(),
+				$this->userManager,
+				$this->config,
+				$this->session,
+				$this->userSession,
+				$this->urlGenerator,
+				$this->twoFactorAuthManager,
+				\OC::$server->getBruteForceThrottler()
+			);
+		} else {
+			$loginController = new \OC\Core\Controller\LoginController(
 			'core',
-			$this->getMockedRequest(),
-			$this->userManager,
-			$this->config,
-			$this->session,
-			$this->userSession,
-			$this->urlGenerator,
-			$this->logger,
-			$this->twoFactorAuthManager
-		);
+				$this->getMockedRequest(),
+				$this->userManager,
+				$this->config,
+				$this->session,
+				$this->userSession,
+				$this->urlGenerator,
+				$this->logger,
+				$this->twoFactorAuthManager
+			);
+		}
 
 		return $loginController->tryLogin($username, $password, '');
 	}
