@@ -38,6 +38,6 @@ class AppTest extends TestCase {
 	public function testLoginPage() {
 		define('PHPUNIT_BYPASS_URL', 'foo');
 		require __DIR__ . '/../../../appinfo/app.php';
-		$this->assertSame(Request::class, get_class(\OC::$server->getRequest()));
+		$this->assertSame(\OCA\LoginViaPost\Request::class, get_class(\OC::$server->getRequest()));
 	}
 }

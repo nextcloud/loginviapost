@@ -30,7 +30,7 @@ if($currentUrl !== $expectedUrl && !defined('PHPUNIT_BYPASS_URL')) {
 }
 
 // Register the request service again
-$serverContainer->registerService(\OCP\IRequest::class, function() use ($serverContainer) {
+$serverContainer->registerService('Request', function() use ($serverContainer) {
 	if (isset($serverContainer['urlParams'])) {
 		$urlParams = $this['urlParams'];
 	} else {
