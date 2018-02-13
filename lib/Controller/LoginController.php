@@ -49,6 +49,8 @@ class LoginController extends Controller {
 	private $logger;
 	/** @var Manager */
 	private $twoFactorAuthManager;
+    /** @var Defaults */
+    private $defaults;
 
 	public function __construct($appName,
 								IRequest $request,
@@ -67,6 +69,7 @@ class LoginController extends Controller {
 		$this->session = $session;
 		$this->logger = $logger;
 		$this->twoFactorAuthManager = $twoFactorAuthManager;
+        $this->defaults = new \OCP\Defaults();
 	}
 
 	private function getMockedRequest() {
@@ -102,31 +105,61 @@ class LoginController extends Controller {
 		$parameters = $class->getConstructor()->getParameters();
 
 		/** @var \OC\Core\Controller\LoginController $loginController */
-		if($parameters[8]->getName() === 'throttler') {
-			$loginController = new \OC\Core\Controller\LoginController(
-				'core',
-				$this->getMockedRequest(),
-				$this->userManager,
-				$this->config,
-				$this->session,
-				$this->userSession,
-				$this->urlGenerator,
-				$this->twoFactorAuthManager,
-				\OC::$server->getBruteForceThrottler()
-			);
-		} else {
-			$loginController = new \OC\Core\Controller\LoginController(
-			'core',
-				$this->getMockedRequest(),
-				$this->userManager,
-				$this->config,
-				$this->session,
-				$this->userSession,
-				$this->urlGenerator,
-				$this->logger,
-				$this->twoFactorAuthManager
-			);
-		}
+        if(\OCP\Util::getVersion()[0] >= 13) {
+            if($parameters[8]->getName() === 'throttler') {
+                $loginController = new \OC\Core\Controller\LoginController(
+                    'core',
+                    $this->getMockedRequest(),
+                    $this->userManager,
+                    $this->config,
+                    $this->session,
+                    $this->userSession,
+                    $this->urlGenerator,
+                    $this->twoFactorAuthManager,
+                    $this->defaults,
+                    \OC::$server->getBruteForceThrottler()
+                );
+            } else {
+                $loginController = new \OC\Core\Controller\LoginController(
+                'core',
+                    $this->getMockedRequest(),
+                    $this->userManager,
+                    $this->config,
+                    $this->session,
+                    $this->userSession,
+                    $this->urlGenerator,
+                    $this->logger,
+                    $this->twoFactorAuthManager,
+                    $this->defaults
+                );
+            }
+        } else {
+            if($parameters[8]->getName() === 'throttler') {
+                $loginController = new \OC\Core\Controller\LoginController(
+                    'core',
+                    $this->getMockedRequest(),
+                    $this->userManager,
+                    $this->config,
+                    $this->session,
+                    $this->userSession,
+                    $this->urlGenerator,
+                    $this->twoFactorAuthManager,
+                    \OC::$server->getBruteForceThrottler()
+                );
+            } else {
+                $loginController = new \OC\Core\Controller\LoginController(
+                'core',
+                    $this->getMockedRequest(),
+                    $this->userManager,
+                    $this->config,
+                    $this->session,
+                    $this->userSession,
+                    $this->urlGenerator,
+                    $this->logger,
+                    $this->twoFactorAuthManager
+                );
+            }
+        }
 
 		return $loginController->tryLogin($username, $password, '');
 	}
