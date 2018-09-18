@@ -30,7 +30,7 @@ the following form explains the usage  of this plugin:
 	<bugs>https://github.com/nextcloud/loginviapost/issues</bugs>
 	<repository>https://github.com/nextcloud/loginviapost</repository>
 	<dependencies>
-		<nextcloud min-version="11" max-version="13"/>
+		<nextcloud min-version="14" max-version="14"/>
 	</dependencies>
 	<types>
 		<session/>

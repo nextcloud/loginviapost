@@ -31,12 +31,6 @@ if($currentUrl !== $expectedUrl && !defined('PHPUNIT_BYPASS_URL')) {
 
 // Register the request service again
 $serverContainer->registerService('Request', function() use ($serverContainer) {
-	if (isset($serverContainer['urlParams'])) {
-		$urlParams = $this['urlParams'];
-	} else {
-		$urlParams = [];
-	}
-
 	if (defined('PHPUNIT_RUN') && PHPUNIT_RUN
 		&& in_array('fakeinput', stream_get_wrappers())
 	) {
@@ -56,7 +50,7 @@ $serverContainer->registerService('Request', function() use ($serverContainer) {
 			'method' => (isset($_SERVER) && isset($_SERVER['REQUEST_METHOD']))
 				? $_SERVER['REQUEST_METHOD']
 				: null,
-			'urlParams' => $urlParams,
+			'urlParams' => isset($serverContainer['urlParams']) ? $serverContainer['urlParams'] : [],
 		],
 		$serverContainer->getSecureRandom(),
 		$serverContainer->getConfig(),
