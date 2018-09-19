@@ -22,7 +22,7 @@ the following form explains the usage  of this plugin:
     </body>
 </html>
 ```]]></description>
-	<version>1.0.6</version>
+	<version>1.1.0</version>
 	<licence>agpl</licence>
 	<author>Lukas Reschke</author>
 	<namespace>LoginViaPost</namespace>
@@ -30,7 +30,7 @@ the following form explains the usage  of this plugin:
 	<bugs>https://github.com/nextcloud/loginviapost/issues</bugs>
 	<repository>https://github.com/nextcloud/loginviapost</repository>
 	<dependencies>
-		<nextcloud min-version="11" max-version="13"/>
+		<nextcloud min-version="14" max-version="14"/>
 	</dependencies>
 	<types>
 		<session/>

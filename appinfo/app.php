@@ -30,9 +30,9 @@ if($currentUrl !== $expectedUrl && !defined('PHPUNIT_BYPASS_URL')) {
 }
 
 // Register the request service again
-$serverContainer->registerService('Request', function() use ($serverContainer) {
-	if (isset($serverContainer['urlParams'])) {
-		$urlParams = $this['urlParams'];
+$serverContainer->registerService('Request', function($c) {
+	if (isset($c['urlParams'])) {
+		$urlParams = $c['urlParams'];
 	} else {
 		$urlParams = [];
 	}
@@ -55,12 +55,12 @@ $serverContainer->registerService('Request', function() use ($serverContainer) {
 			'cookies' => $_COOKIE,
 			'method' => (isset($_SERVER) && isset($_SERVER['REQUEST_METHOD']))
 				? $_SERVER['REQUEST_METHOD']
-				: null,
+				: NULL,
 			'urlParams' => $urlParams,
 		],
-		$serverContainer->getSecureRandom(),
-		$serverContainer->getConfig(),
-		$serverContainer->getCsrfTokenManager(),
+		$c->getSecureRandom(),
+		$c->getConfig(),
+		$c->getCsrfTokenManager(),
 		$stream
 	);
 });
