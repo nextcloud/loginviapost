@@ -17,4 +17,7 @@ the following form explains the usage  of this plugin:
         </form>
     </body>
 </html>
+
+For use this plugin you need to edit core file in your nextcloud installation folder - lib/private/AppFramework/Http/Request.php#503 -> add "return FALSE;".
+
 ```
