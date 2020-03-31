@@ -21,11 +21,14 @@
 
 namespace OCA\LoginViaPost\Controller;
 
+use OC\Authentication\Login\Chain;
 use OC\Authentication\TwoFactorAuth\Manager;
 use OCA\LoginViaPost\Request;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\RedirectResponse;
+use OCP\Defaults;
 use OCP\IConfig;
+use OCP\IInitialStateService;
 use OCP\ILogger;
 use OCP\IRequest;
 use OCP\ISession;
@@ -102,31 +105,20 @@ class LoginController extends Controller {
 		$parameters = $class->getConstructor()->getParameters();
 
 		/** @var \OC\Core\Controller\LoginController $loginController */
-		if($parameters[8]->getName() === 'throttler') {
-			$loginController = new \OC\Core\Controller\LoginController(
-				'core',
-				$this->getMockedRequest(),
-				$this->userManager,
-				$this->config,
-				$this->session,
-				$this->userSession,
-				$this->urlGenerator,
-				$this->twoFactorAuthManager,
-				\OC::$server->getBruteForceThrottler()
-			);
-		} else {
-			$loginController = new \OC\Core\Controller\LoginController(
+		$loginController = new \OC\Core\Controller\LoginController(
 			'core',
-				$this->getMockedRequest(),
-				$this->userManager,
-				$this->config,
-				$this->session,
-				$this->userSession,
-				$this->urlGenerator,
-				$this->logger,
-				$this->twoFactorAuthManager
-			);
-		}
+			$this->getMockedRequest(),
+			$this->userManager,
+			$this->config,
+			$this->session,
+			$this->userSession,
+			$this->urlGenerator,
+			\OC::$server->getLogger(),
+			\OC::$server->query(Defaults::class),
+			\OC::$server->getBruteForceThrottler(),
+			\OC::$server->query(Chain::class),
+			\OC::$server->query(IInitialStateService::class)
+		);
 
 		return $loginController->tryLogin($username, $password, '');
 	}
