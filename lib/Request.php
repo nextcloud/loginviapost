@@ -22,15 +22,15 @@
 namespace OCA\LoginViaPost;
 
 class Request extends \OC\AppFramework\Http\Request {
-	public function passesCSRFCheck() {
+	public function passesCSRFCheck(): bool {
 		return true;
 	}
 
-	public function passesLaxCookieCheck() {
+	public function passesLaxCookieCheck(): bool {
 		return true;
 	}
 
-	public function passesStrictCookieCheck() {
+	public function passesStrictCookieCheck(): bool {
 		return true;
 	}
 }
